@@ -77,7 +77,7 @@ class Menu extends StatelessWidget {
                         ),
                       ),
                     ),
-                    child: const Text('Place Order'),
+                    child: const Text(key: Key('PlaceOrder'), 'Place Order'),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -95,16 +95,18 @@ class Menu extends StatelessWidget {
             // padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             itemCount: dishesList.length,
             itemBuilder: (context, i) {
-              return MenuItem(dish: dishesList[i]);
+              return MenuItem(dish: dishesList[i], index: i);
             }));
   }
 }
 
 class MenuItem extends StatelessWidget {
   final Dishes dish;
+  final int index;
   const MenuItem({
     required this.dish,
     Key? key,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -135,11 +137,11 @@ class MenuItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
+                      const Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
-                        children: const [
+                        children: [
                           Text("subheading"),
                           Text("heading"),
                         ],
@@ -148,26 +150,28 @@ class MenuItem extends StatelessWidget {
                         width: MediaQuery.of(context).size.width * 0.7 - 40,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             const Text("price"),
                             BlocBuilder<CheckoutBloc, CheckoutState>(
                               builder: (context, state) {
-int value = 0;
-if(state is CartUpdated){
-  value = state.dishes.where((element) => element.id == dish.id).toList().length;
-}
-                                
+                                int value = 0;
+                                if (state is CartUpdated) {
+                                  value = state.dishes
+                                      .where((element) => element.id == dish.id)
+                                      .toList()
+                                      .length;
+                                }
 
                                 return Counter(
+                                    index: index,
                                     increment: () =>
                                         BlocProvider.of<CheckoutBloc>(context)
                                           ..add(AddMenuItemToCart(dish: dish)),
                                     init: value,
-                                    decrement: () => context
-                                        .read<CheckoutBloc>()
-                                        .add(RemoveMenuItemToCart(dish: dish)));
+                                    decrement: () => BlocProvider.of<
+                                        CheckoutBloc>(context)
+                                      ..add(RemoveMenuItemToCart(dish: dish)));
                               },
                             )
                           ],

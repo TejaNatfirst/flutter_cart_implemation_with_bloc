@@ -30,6 +30,7 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          key: const Key('BackButton'),
           title: const Text('cart'),
           automaticallyImplyLeading: true,
           backgroundColor: Colors.white,
@@ -98,21 +99,23 @@ class CartScreen extends StatelessWidget {
                                   ],
                                 ),
                                 Counter(
-                                     increment: () =>
-                                        BlocProvider.of<CheckoutBloc>(context)
-                                          ..add(AddMenuItemToCart(dish: state.dishes
-                                                  .toSet()
-                                                  .elementAt(i))),
-                                    init: state.dishes
-                                        .where((element) =>
-                                            state.dishes
+                                  index: i,
+                                  increment: () =>
+                                      BlocProvider.of<CheckoutBloc>(context)
+                                        ..add(AddMenuItemToCart(
+                                            dish: state.dishes
                                                 .toSet()
-                                                .elementAt(i)
-                                                .id ==
-                                            element.id)
-                                        .toList()
-                                        .length,
-                                    decrement: () =>
+                                                .elementAt(i))),
+                                  init: state.dishes
+                                      .where((element) =>
+                                          state.dishes
+                                              .toSet()
+                                              .elementAt(i)
+                                              .id ==
+                                          element.id)
+                                      .toList()
+                                      .length,
+                                  decrement: () =>
                                       BlocProvider.of<CheckoutBloc>(context)
                                         ..add(RemoveMenuItemToCart(
                                             dish: state.dishes

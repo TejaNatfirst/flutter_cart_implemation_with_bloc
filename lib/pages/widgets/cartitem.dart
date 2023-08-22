@@ -27,11 +27,14 @@ class CartItem extends StatelessWidget {
             Row(
               children: [
                 const Text("title"),
-                Counter(increment: () {
-                  print("");
-                }, decrement: () {
-                  print("");
-                }),
+                Counter(
+                    index: 0,
+                    increment: () {
+                      print("");
+                    },
+                    decrement: () {
+                      print("");
+                    }),
               ],
             ),
             Row(
